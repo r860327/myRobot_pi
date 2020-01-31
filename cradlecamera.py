@@ -92,7 +92,7 @@ if __name__ == '__main__':
         #if v_pos == 'q' or h_pos == 'q':
         #    break
         #camera_servo.set_postion(int(h_pos), int(v_pos))
-        direction = raw_input("please input direction:")
-        x_or_y = raw_input("please input x_or_y:")
-        delta_angle = raw_input("please input delta_angle:")
+        direction = input("please input direction:")
+        x_or_y = input("please input x_or_y:")
+        delta_angle = input("please input delta_angle:")
         camera_servo.update_pos(int(direction), int(x_or_y), int(delta_angle))

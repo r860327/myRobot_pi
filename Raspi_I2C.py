@@ -30,20 +30,20 @@ class Raspi_I2C :
     try:
       self.bus.write_byte_data(self.address, reg, value)
       if (self.debug):
-        print "I2C: Wrote 0x%02X to register 0x%02X" % (value, reg)
-    except IOError, err:
-      print "Error accessing 0x%02X: Check your I2C address" % self.address
+        print("I2C: Wrote 0x%02X to register 0x%02X" % (value, reg))
+    except IOError as err:
+      print("Error accessing 0x%02X: Check your I2C address" % self.address)
       return -1
 
   def writeList(self, reg, list):
     "Writes an array of bytes using I2C format"
     try:
       if (self.debug):
-        print "I2C: Writing list to register 0x%02X:" % reg
-        print list
+        print("I2C: Writing list to register 0x%02X:" % reg)
+        print(list)
       self.bus.write_i2c_block_data(self.address, reg, list)
-    except IOError, err:
-      print "Error accessing 0x%02X: Check your I2C address" % self.address
+    except IOError as err:
+      print("Error accessing 0x%02X: Check your I2C address" % self.address)
       return -1
 
   def readList(self, reg, length):
@@ -52,11 +52,11 @@ class Raspi_I2C :
     try:
       results = self.bus.read_i2c_block_data(self.address, reg, length)
       if (self.debug):
-        print "I2C: Device 0x%02X returned the following from reg 0x%02X" % (self.address, reg)
-        print results
+        print("I2C: Device 0x%02X returned the following from reg 0x%02X" % (self.address, reg))
+        print(results)
       return results
-    except IOError, err:
-      print "Error accessing 09x%02X: Check your I2C address" % self.address
+    except IOError as err:
+      print("Error accessing 09x%02X: Check your I2C address" % self.address)
       return -1
 
   def readU8(self, reg):
@@ -64,10 +64,10 @@ class Raspi_I2C :
     try:
       result = self.bus.read_byte_data(self.address, reg)
       if (self.debug):
-        print "I2C: Device 0x%02X returned 0x%02X from reg 0x%02X" % (self.address, result & 0xFF, reg)
+        print("I2C: Device 0x%02X returned 0x%02X from reg 0x%02X" % (self.address, result & 0xFF, reg))
       return result
-    except IOError, err:
-      print "Error accessing 0x%02X: Check your I2C address" % self.address
+    except IOError as err:
+      print("Error accessing 0x%02X: Check your I2C address" % self.address)
       return -1
 
   def readS8(self, reg):
@@ -75,13 +75,13 @@ class Raspi_I2C :
     try:
       result = self.bus.read_byte_data(self.address, reg)
       if (self.debug):
-        print "I2C: Device 0x%02X returned 0x%02X from reg 0x%02X" % (self.address, result & 0xFF, reg)
+        print("I2C: Device 0x%02X returned 0x%02X from reg 0x%02X" % (self.address, result & 0xFF, reg))
       if (result > 127):
         return result - 256
       else:
         return result
-    except IOError, err:
-      print "Error accessing 0x%02X: Check your I2C address" % self.address
+    except IOError as err:
+      print("Error accessing 0x%02X: Check your I2C address" % self.address)
       return -1
 
   def readU16(self, reg):
@@ -90,10 +90,10 @@ class Raspi_I2C :
       hibyte = self.bus.read_byte_data(self.address, reg)
       result = (hibyte << 8) + self.bus.read_byte_data(self.address, reg+1)
       if (self.debug):
-        print "I2C: Device 0x%02X returned 0x%04X from reg 0x%02X" % (self.address, result & 0xFFFF, reg)
+        print("I2C: Device 0x%02X returned 0x%04X from reg 0x%02X" % (self.address, result & 0xFFFF, reg))
       return result
-    except IOError, err:
-      print "Error accessing 0x%02X: Check your I2C address" % self.address
+    except IOError as err:
+      print("Error accessing 0x%02X: Check your I2C address" % self.address)
       return -1
 
   def readS16(self, reg):
@@ -104,8 +104,8 @@ class Raspi_I2C :
         hibyte -= 256
       result = (hibyte << 8) + self.bus.read_byte_data(self.address, reg+1)
       if (self.debug):
-        print "I2C: Device 0x%02X returned 0x%04X from reg 0x%02X" % (self.address, result & 0xFFFF, reg)
+        print("I2C: Device 0x%02X returned 0x%04X from reg 0x%02X" % (self.address, result & 0xFFFF, reg))
       return result
-    except IOError, err:
-      print "Error accessing 0x%02X: Check your I2C address" % self.address
+    except IOError as err:
+      print("Error accessing 0x%02X: Check your I2C address" % self.address)
       return -1

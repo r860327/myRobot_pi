@@ -73,29 +73,32 @@ class RaspiMotor:
             time.sleep(seconds)
             self.stop()
 
+    def shutDown(self):
+        GPIO.cleanup()
+
     def test(self):
-        raw_input("forward")
+        input("forward")
         self.forward(2)
 
-        raw_input("left")
+        input("left")
         self.left(2)
 
-        raw_input("right")
+        input("right")
         self.right(2)
 
-        raw_input("reverse")
+        input("reverse")
         self.reverse(2)
 
-        raw_input("stop")
+        input("stop")
         self.stop()
 
 
-        raw_input("End of test")
+        input("End of test")
 
 if __name__ == '__main__':
     motor = RaspiMotor()
     while True:
-        cmd = raw_input('please input motor command:')
+        cmd = input('please input motor command:')
         if cmd == 'q':
             break
         if cmd == 'w':
@@ -108,3 +111,5 @@ if __name__ == '__main__':
             motor.reverse(2)
         else:
             print('unknow command')
+
+    motor.shutDown()
