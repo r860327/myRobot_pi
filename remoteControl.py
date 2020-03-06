@@ -6,6 +6,7 @@ import sys
 import RPi.GPIO as GPIO
 from cradlecamera import CameraServo
 from pwm_control_motor import PWMControlMotor
+import utils
 
 # rr = RaspiMotor()
 rr = PWMControlMotor()
@@ -24,32 +25,59 @@ CAM_VERTICAL_DIR = 1
 CAM_ANGLE_DECREASE = 0
 CAM_ANGLE_INCREASE = 1
 
+if utils.isPython3():
+	go_forward_key = b'ud'
+	turn_left_key = b'ld'
+	turn_right_key = b'rd'
+	stop_key = b'dd'
+
+	camera_up_key = b'udc'
+	camera_left_key = b'ldc'
+	camera_right_key = b'rdc'
+	camera_down_key = b'ddc'
+else:
+	go_forward_key = 'ud'
+	turn_left_key = 'ld'
+	turn_right_key = 'rd'
+	stop_key = 'dd'
+
+	camera_up_key = 'udc'
+	camera_left_key = 'ldc'
+	camera_right_key = 'rdc'
+	camera_down_key = 'ddc'
+
+
 while True:
-	print 'waiting for connection...'
+	print('waiting for connection...')
 	tcpClientSock,clientAddr = tcpSerSock.accept()
-	print '...connected from :', clientAddr
+	print('...connected from :', clientAddr)
 	while True:
 		data = tcpClientSock.recv(BUFSIZE)
 		if not data:
 			break
-		print '[%s] %s' % (ctime(), data)
+		print('[%s] %s' % (ctime(), data))
 
-		if data == 'ud':
+		if utils.isPython3():
+			data_array = data.split(b'\n')
+		else:
+			data_array = data.split('\n')
+
+		if go_forward_key in data_array:
 			rr.go_forward(0.075)
-		elif data == 'ld':
+		elif turn_left_key in data_array:
 			rr.turn_left(0.075)
-		elif data == 'dd':
+		elif stop_key in data_array:
 			rr.stop()
-		elif data == 'rd':
+		elif turn_right_key in data_array:
 			rr.turn_right(0.075)
-		elif data == 'udc':
+		elif camera_up_key in data_array:
 			camera_servo.update_pos(CAM_ANGLE_DECREASE, CAM_VERTICAL_DIR, 5)
-		elif data == 'ddc':
+		elif camera_down_key in data_array:
 			camera_servo.update_pos(CAM_ANGLE_INCREASE, CAM_VERTICAL_DIR, 5)
-		elif data == 'ldc':
+		elif camera_left_key in data_array:
 			camera_servo.update_pos(CAM_ANGLE_INCREASE, CAM_HORIZONTAL_DIR, 5)
-		elif data == 'rdc':
+		elif camera_right_key in data_array:
 			camera_servo.update_pos(CAM_ANGLE_DECREASE, CAM_HORIZONTAL_DIR, 5)
 		else:
-			print 'unknow command'
+			print('unknow command')
 	tcpClientSock.close()

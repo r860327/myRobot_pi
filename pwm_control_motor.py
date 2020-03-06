@@ -2,6 +2,7 @@
 
 from Raspi_PWM_Servo_Driver import PWM
 import time
+import utils
 
 
 LEFT_WHEEL_CHANNEL = 8
@@ -33,14 +34,14 @@ class PWMControlMotor:
             self.stop()
 
     def turn_left(self, seconds=0):
-        self.set_pulse_width(LEFT_WHEEL_CHANNEL, 1000)
+        self.set_pulse_width(LEFT_WHEEL_CHANNEL, 0)
         self.set_pulse_width(RIGHT_WHEEL_CHANNEL, 3000)
         if seconds > 0:
             time.sleep(seconds)
             self.stop()
 
     def turn_right(self, seconds=0):
-        self.set_pulse_width(RIGHT_WHEEL_CHANNEL, 1000)
+        self.set_pulse_width(RIGHT_WHEEL_CHANNEL, 0)
         self.set_pulse_width(LEFT_WHEEL_CHANNEL, 3000)
         if seconds > 0:
             time.sleep(seconds)
@@ -57,8 +58,10 @@ class PWMControlMotor:
 if __name__ == '__main__':
     pwm_control_motor = PWMControlMotor()
     while True:
-
-        direction = raw_input("please input 'l' or 'r' or 'g' or 's':")
+        if utils.isPython3():
+            direction = input("please input 'l' or 'r' or 'g' or 's':")
+        else:
+            direction = raw_input("please input 'l' or 'r' or 'g' or 's':")
 
         if direction == 'l':
             pwm_control_motor.turn_left(2)
