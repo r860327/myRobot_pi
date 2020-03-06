@@ -5,8 +5,10 @@ from motor import *
 import sys
 import RPi.GPIO as GPIO
 from cradlecamera import CameraServo
+from pwm_control_motor import PWMControlMotor
 
-rr = RaspiMotor()
+# rr = RaspiMotor()
+rr = PWMControlMotor()
 camera_servo = CameraServo(355, 290)
 
 HOST = ''
@@ -33,13 +35,13 @@ while True:
 		print '[%s] %s' % (ctime(), data)
 
 		if data == 'ud':
-			rr.forward(0.075)
+			rr.go_forward(0.075)
 		elif data == 'ld':
-			rr.left(0.075)
+			rr.turn_left(0.075)
 		elif data == 'dd':
-			rr.reverse(0.075)
+			rr.stop()
 		elif data == 'rd':
-			rr.right(0.075)
+			rr.turn_right(0.075)
 		elif data == 'udc':
 			camera_servo.update_pos(CAM_ANGLE_DECREASE, CAM_VERTICAL_DIR, 5)
 		elif data == 'ddc':
@@ -51,4 +53,3 @@ while True:
 		else:
 			print 'unknow command'
 	tcpClientSock.close()
-tcpSerSock.close()
